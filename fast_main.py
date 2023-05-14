@@ -93,10 +93,8 @@ def draw_pixel(xy):
     x, y = xy
     D = np.array([x * Vw / Cw, y * Vh / Ch, d])
     D = R.from_euler("xyz", rotation, degrees=True).apply(D)
-    # exit(0)
     color = TraceRay(O, D, 1, inf, recur_depth)
     return [[x + Cw // 2, Ch // 2 - y - 1], [max(min(255, i), 0) for i in color]]
-    # pygame.display.flip()
 
 
 def draw_screen():
@@ -111,9 +109,6 @@ def draw_screen():
             for i in p.map(draw_pixel, g):
                 screen.set_at(*i)
             pygame.display.flip()
-    # for i in res:
-    # screen.set_at(*i)
-
 
 def draw_screen_but_cooler():
     n = set()
@@ -154,7 +149,6 @@ if __name__ == "__main__":
         draw_screen_but_cooler()
     else:
         draw_screen()
-    # test_screen()
     print(time.time() - start)
     pygame.display.flip()
     while run:
@@ -163,4 +157,3 @@ if __name__ == "__main__":
                 run = False
         clock.tick(60)
     pygame.quit()
-# time = 160 seconds
