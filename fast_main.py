@@ -1,7 +1,5 @@
 import pygame
 import numpy as np
-import pandas as pp
-import plotly.express as plt
 import scene
 from scipy.spatial.transform import Rotation as R
 import time
