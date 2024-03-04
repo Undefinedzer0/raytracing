@@ -1,4 +1,3 @@
-import pygame
 import numpy as np
 import scene
 from scipy.spatial.transform import Rotation as R
@@ -98,27 +97,23 @@ def draw_pixel(xy):
 
 
 def draw_screen():
-    for x in range(-Cw // 2, Cw // 2, 10):
+    for x in range(-Cw // 2, Cw // 2, pool_size):
         print(x)
-        for y in range(-Ch // 2, Ch // 2, 10):
+        for y in range(Ch // 2 - 1, -Ch // 2 - 1, -pool_size):
             pygame.event.get()
-            g = []
-            for xx in range(10):
-                for yy in range(10):
-                    g.append((x + xx, y + yy))
-            for i in p.map(draw_pixel, g):
+            for i in p.map(draw_pixel, [[x + xx, y - yy] for xx in range(pool_size) for yy in range(pool_size)]):
                 screen.set_at(*i)
             pygame.display.flip()
 
 def draw_screen_but_cooler():
     n = set()
-    for y in range(-Ch // 2, Ch // 2):
+    for y in range(Ch // 2 - 1, -Ch // 2 - 1, -1):
         for x in range(-Cw // 2, Cw // 2):
             n.add((x, y))
     n = list(n)
-    for j in range(0, Ch * Cw, 16):
+    for j in range(0, Ch * Cw, pool_size**2):
         pygame.event.get()
-        for i in p.map(draw_pixel, [n[j + h] for h in range(16)]):
+        for i in p.map(draw_pixel, [n[j + h] for h in range(pool_size**2)]):
             screen.set_at(*i)
         pygame.display.flip()
 
@@ -127,23 +122,26 @@ res = []
 spheres = scene.spheres()
 lights = scene.lights()
 run = True
-Cw = 1000
-Ch = 1000
+Cw = 500
+Ch = 500
 Vw = 1
 Vh = 1
 d = 1
 inf = 2 ** 20
-recur_depth = 2
+recur_depth = 3
 background_color = [255, 255, 255]
 rotation = [0, 0, 0]
 O = [0, 0, 0]
+pool_size=20
 if __name__ == "__main__":
-    start = time.time()
-    p = Pool(10)
+    import pygame
+    
+    p = Pool(pool_size)
     pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((Cw, Ch))
     pygame.display.set_caption("fast rt")
+    start = time.time()
     cool = False
     if cool:
         draw_screen_but_cooler()
